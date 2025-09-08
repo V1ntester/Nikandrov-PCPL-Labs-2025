@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 class Program
 {
@@ -27,49 +28,71 @@ class Program
                  double.TryParse(secondCoefficientBuffer, out secondCoefficient) &&
                  double.TryParse(thirdCoefficientBuffer, out thirdCoefficient)))
         {
-            Console.WriteLine("Ошибка приведения значенийй ввода\n");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ошибка приведения значений ввода\n");
+            Console.ResetColor();
             ReadCoefficientsToBuffers(out firstCoefficientBuffer, out secondCoefficientBuffer, out thirdCoefficientBuffer);
         }
 
-        if (firstCoefficient == 0 && secondCoefficient == 0)
+        if (firstCoefficient == 0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-
-            if (thirdCoefficient == 0)
-            {
-                Console.WriteLine("Бесконечное количество решений уравнения");
-            }
-            else
-            {
-                Console.WriteLine("Нет решений уравнения");
-            }
-
+            Console.WriteLine("Не является биквадратным уравнением");
+            Console.ResetColor();
             return;
         }
 
         double discriminant = secondCoefficient * secondCoefficient - 4 * firstCoefficient * thirdCoefficient;
 
-        if (discriminant > 0)
-        {
-            double firstRoot = (-secondCoefficient + Math.Sqrt(discriminant)) / (2 * firstCoefficient);
-            double secondRoot = (-secondCoefficient - Math.Sqrt(discriminant)) / (2 * firstCoefficient);
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Первый корень уравнения: {0}; Второй корень уравнения: {1}", firstRoot, secondRoot);
-        }
-        else if (discriminant == 0)
-        {
-            double root = -secondCoefficient / (2 * firstCoefficient);
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Корень уравнения: {0}", root);
-        }
-        else
+        if (discriminant < 0.0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Нет действительных решений уравнения");
+            Console.ResetColor();
+            return;
         }
+
+        List<double> roots = new List<double>();
+
+        if (discriminant > 0.0)
+        {
+            double sqrtDiscriminant = Math.Sqrt(discriminant);
+            double denominator = 2 * firstCoefficient;
+
+            double firstReplacedRoot = (-secondCoefficient + sqrtDiscriminant) / denominator;
+            roots.AddRange(CalculateRootsFromReplacedRoot(firstReplacedRoot));
+
+            double secondReplacedRoot = (-secondCoefficient - sqrtDiscriminant) / denominator;
+            roots.AddRange(CalculateRootsFromReplacedRoot(secondReplacedRoot));
+        }
+        else if (Math.Abs(discriminant) < double.Epsilon)
+        {
+            double replacedRoot = -secondCoefficient / (2 * firstCoefficient);
+            roots.AddRange(CalculateRootsFromReplacedRoot(replacedRoot));
+        }
+
+        PrintRootsFromList(roots);
     }
+
+    private static List<double> CalculateRootsFromReplacedRoot(double replacedRoot)
+    {
+        List<double> roots = new List<double>();
+
+        if (replacedRoot > 0)
+        {
+            double firstRoot = Math.Sqrt(replacedRoot);
+            double secondRoot = -firstRoot;
+
+            roots.Add(firstRoot);
+            roots.Add(secondRoot);
+        }
+        else if (Math.Abs(replacedRoot) < double.Epsilon)
+        {
+            roots.Add(0);
+        }
+
+        return roots;
+    } 
 
     private static void ReadCoefficientsToBuffers(out string firstCoefficientBuffer, out string secondCoefficientBuffer, out string thirdCoefficientBuffer)
     {
@@ -81,5 +104,17 @@ class Program
 
         Console.Write("Введите коэффициент C: ");
         thirdCoefficientBuffer = Console.ReadLine() ?? "0";
+    }
+
+    private static void PrintRootsFromList(List<double> roots)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        foreach(double root in roots)
+        {
+            Console.Write("Корень: {0}; ", root);
+        }
+
+        Console.Write('\n');
+        Console.ResetColor();
     }
 }
