@@ -111,7 +111,7 @@ class Program
         Console.ForegroundColor = ConsoleColor.Green;
         foreach(double root in roots)
         {
-            Console.Write("Корень: {0}; ", root);
+            Console.Write("Корень: {0:F4}; ", root);
         }
 
         Console.Write('\n');
