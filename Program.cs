@@ -5,9 +5,9 @@ class Program
 {
     public static void Main(string[] args)
     {
-        string firstCoefficientBuffer = string.Empty;
-        string secondCoefficientBuffer = string.Empty;
-        string thirdCoefficientBuffer = string.Empty;
+        string firstCoefficientBuffer;
+        string secondCoefficientBuffer;
+        string thirdCoefficientBuffer;
 
         if (args.Length == 3)
         {
