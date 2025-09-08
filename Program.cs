@@ -28,17 +28,13 @@ class Program
                  double.TryParse(secondCoefficientBuffer, out secondCoefficient) &&
                  double.TryParse(thirdCoefficientBuffer, out thirdCoefficient)))
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ошибка приведения значений ввода\n");
-            Console.ResetColor();
+            PrintErrorMessage("Ошибка приведения значений ввода\n");
             ReadCoefficientsToBuffers(out firstCoefficientBuffer, out secondCoefficientBuffer, out thirdCoefficientBuffer);
         }
 
         if (firstCoefficient == 0)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Не является биквадратным уравнением");
-            Console.ResetColor();
+            PrintErrorMessage("Не является биквадратным уравнением");
             return;
         }
 
@@ -46,9 +42,7 @@ class Program
 
         if (discriminant < 0.0)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Нет действительных решений уравнения");
-            Console.ResetColor();
+            PrintErrorMessage("Нет действительных решений уравнения");
             return;
         }
 
@@ -92,7 +86,7 @@ class Program
         }
 
         return roots;
-    } 
+    }
 
     private static void ReadCoefficientsToBuffers(out string firstCoefficientBuffer, out string secondCoefficientBuffer, out string thirdCoefficientBuffer)
     {
@@ -109,12 +103,19 @@ class Program
     private static void PrintRootsFromList(List<double> roots)
     {
         Console.ForegroundColor = ConsoleColor.Green;
-        foreach(double root in roots)
+        foreach (double root in roots)
         {
             Console.Write("Корень: {0:F4}; ", root);
         }
 
         Console.Write('\n');
         Console.ResetColor();
+    }
+
+    private static void PrintErrorMessage(string message)
+    {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
     }
 }
