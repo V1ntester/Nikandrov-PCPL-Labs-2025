@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-class Program
+﻿class Program
 {
-    public static void Main(string[] args)
+    static void Main(string[] args)
     {
         string firstCoefficientBuffer;
         string secondCoefficientBuffer;
@@ -114,8 +111,8 @@ class Program
 
     private static void PrintErrorMessage(string message)
     {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
-            Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(message);
+        Console.ResetColor();
     }
 }
