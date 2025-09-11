@@ -12,14 +12,24 @@ public class SimpleList<T> : IEnumerable<T>
     {
         SimpleNode<T> newNode = new(value);
 
-        if (_head is null) _head = newNode;
-        else _head.Next = newNode;
+        if (_head is null)
+        {
+            _head = newNode;
+            _tail = newNode;
+        }
+        else
+        {
+            _tail!.Next = newNode;
+            _tail = _tail.Next;
+        }
 
         ++Length;
     }
 
     public bool Remove(T value)
     {
+        bool isRemoved = false;
+
         SimpleNode<T>? current = _head;
         SimpleNode<T>? previous = null;
 
@@ -29,14 +39,67 @@ public class SimpleList<T> : IEnumerable<T>
             {
                 if (previous is not null)
                 {
-
+                    previous.Next = current.Next;
                 }
                 else
                 {
-                
-              }
-            } 
+                    _head = current.Next;
+                }
+
+                --Length;
+
+                isRemoved = true;
+            }
+
+            previous = current;
+            current = current.Next;
         }
+
+        return isRemoved;
+    }
+    
+    public T this[int index]
+    {
+        get
+        {
+            if (index < 0 || index >= Length) throw new IndexOutOfRangeException();
+
+            SimpleNode<T>? current = _head;
+
+            for (int i = 0; i < index; i++)
+            {
+                current = current!.Next;
+            }
+
+            return current!.Value;
+        }
+        
+        set
+        {
+            if (index < 0 || index >= Length) throw new IndexOutOfRangeException();
+
+            SimpleNode<T>? current = _head;
+
+            for (int i = 0; i < index; i++)
+            {
+                current = current!.Next;
+            }
+
+            current!.Value = value;
+        }
+    }
+
+    public bool Find(T value)
+    {
+        SimpleNode<T>? current = _head;
+
+        while (current is not null && current.Value is not null)
+        {
+            if (current.Value.Equals(value)) return true;
+            current = current.Next;
+        } 
+
+        return false;
     }
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -55,4 +118,4 @@ public class SimpleList<T> : IEnumerable<T>
         return ((IEnumerable<T>)this).GetEnumerator();
     }
 
-}   
+}
