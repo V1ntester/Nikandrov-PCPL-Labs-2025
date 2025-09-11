@@ -1,5 +1,7 @@
-﻿using Shapes;
-using System.Collections;
+﻿using System.Collections;
+
+using Shapes;
+using SparseMatrix;
 
 class Program
 {
@@ -30,13 +32,19 @@ class Program
 
         Console.Write('\n');
         PrintCollection(list);
+
+        SparseMatrix3D<Shape> sparseMatrix3D = new(3, 3, 3);
+        sparseMatrix3D[1, 1, 1] = new Circle(1);
+
+        Console.Write('\n');
+        Console.WriteLine(sparseMatrix3D.ToString());
     }
 
     private static void PrintCollection(ArrayList arrayList)
     {
-        foreach (object obj in arrayList)
+        foreach (var element in arrayList)
         {
-            Console.WriteLine(obj.ToString());
+            Console.WriteLine(element.ToString());
         }
     }
 
