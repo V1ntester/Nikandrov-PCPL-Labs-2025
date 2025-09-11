@@ -2,6 +2,7 @@
 
 using Shapes;
 using SparseMatrix;
+using SimpleCollections;
 
 class Program
 {
@@ -36,8 +37,12 @@ class Program
         SparseMatrix3D<Shape> sparseMatrix3D = new(3, 3, 3);
         sparseMatrix3D[1, 1, 1] = new Circle(1);
 
-        Console.Write('\n');
         Console.WriteLine(sparseMatrix3D.ToString());
+
+        Stack<Shape> stack = new();
+        stack.Push(new Circle(1));
+
+        Console.WriteLine(stack.Pop().ToString());
     }
 
     private static void PrintCollection(ArrayList arrayList)
