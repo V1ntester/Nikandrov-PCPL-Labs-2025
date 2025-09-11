@@ -27,8 +27,15 @@ public class SimpleList<T> : IEnumerable<T>
         {
             if (current.Value.Equals(value))
             {
+                if (previous is not null)
+                {
+
+                }
+                else
+                {
                 
-            }
+              }
+            } 
         }
     }
 
