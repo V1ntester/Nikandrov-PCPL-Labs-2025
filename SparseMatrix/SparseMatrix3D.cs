@@ -10,7 +10,7 @@ public class SparseMatrix3D<T>
     public SparseMatrix3D(int rowsCount, int columnsCount, int layersCount)
     {
         if (rowsCount < 0 || columnsCount < 0 || layersCount < 0) {
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentOutOfRangeException("Argument out of range");
         }
 
         _rowsCount = rowsCount;
@@ -24,7 +24,7 @@ public class SparseMatrix3D<T>
         {
             if (!ValidateCoords(row, column, layer))
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException("Index out of range");
             }
 
             if (_values.ContainsKey((row, column, layer)))
@@ -41,7 +41,7 @@ public class SparseMatrix3D<T>
         {
             if (!ValidateCoords(row, column, layer))
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException("Index out of range");
             }
 
             if (value is null)

@@ -11,9 +11,7 @@ public class Stack<T> : SimpleList<T>
     public T Pop()
     {
         T value = this[Length];
-
         Remove(value);
-        
         return value;
     }
 }

@@ -1,5 +1,3 @@
-using Microsoft.VisualBasic;
-
 namespace Shapes;
 
 public abstract class Shape : IComparable
@@ -9,6 +7,6 @@ public abstract class Shape : IComparable
     public int CompareTo(object? obj)
     {
         if (obj is Shape shape) return CalculateArea().CompareTo(shape.CalculateArea());
-        else throw new ArgumentException("Argument is incomparable.");
+        else throw new ArgumentException("Argument is incomparable");
     }
 }
