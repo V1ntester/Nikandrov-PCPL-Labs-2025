@@ -6,7 +6,7 @@ Classes:
     Part: Represents a manufacturing part with attributes.
     Manufacturer: Represents a manufacturer with attributes.
     PartsManufacturers: Represents a relationships between parts and manufacturers
-""" 
+"""
 
 from .part import Part
 from .manufacturer import Manufacturer
