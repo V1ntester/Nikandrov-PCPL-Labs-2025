@@ -1,19 +1,6 @@
 """Main application module"""
 
-from domain import Part, Manufacturer
-
-
-class PartsManufacturers:
-    """Represents a many-to-many relationship between parts and manufacturers.
-
-    Attributes:
-        part_id: The unique identifier of the part.
-        manufacturer_id: The unique identifier of the manufacturer.
-    """
-
-    def __init__(self, part_id: int, manufacturer_id: int):
-        self.part_id = part_id
-        self.manufacturer_id = manufacturer_id
+from src.domain import Part, Manufacturer, PartsManufacturers
 
 
 parts = [
@@ -63,7 +50,7 @@ manufacturers = [
     ),
 ]
 
-parts_manufacturers = [
+PartsManufacturers = [
     PartsManufacturers(0, 0),
     PartsManufacturers(1, 1),
     PartsManufacturers(2, 1),
@@ -74,13 +61,26 @@ parts_manufacturers = [
 
 
 def first_task(original_one_to_many):
-    """Print manufacturers starting with 'G' and their parts."""
+    """Return manufacturers starting with 'G' and their parts."""
     print("\nЗадание Г1:")
 
     one_to_many = sorted(original_one_to_many, key=lambda x: x["manufacturer_id"])
-    previous_manufacturer_name = ""
+
+    manufacturer_parts = []
 
     for part in one_to_many:
+        manufacturer_name = part["manufacturer_name"]
+        if manufacturer_name[0] == "G":
+            manufacturer_parts.append(part)
+
+    return manufacturer_parts
+
+
+def print_first_task_result(manufacturer_parts):
+    """Print manufacturers starting with 'G' and their parts."""
+    previous_manufacturer_name = ""
+
+    for part in manufacturer_parts:
         manufacturer_name = part["manufacturer_name"]
         if not manufacturer_name or manufacturer_name[0] != "G":
             continue
@@ -93,12 +93,13 @@ def first_task(original_one_to_many):
 
 
 def second_task(original_one_to_many):
-    """Print the most expensive part for each manufacturer."""
-    print("\nЗадание Г2:")
+    """Return the most expensive part for each manufacturer."""
 
     one_to_many = sorted(
         original_one_to_many, key=lambda x: x["production_cost"], reverse=True
     )
+
+    most_expensive_parts = []
     previous_manufacturers_ids = set()
 
     for part in one_to_many:
@@ -110,29 +111,67 @@ def second_task(original_one_to_many):
             name = part["name"]
             production_cost = part["production_cost"]
 
-            print(
-                f"Производитель: {manufacturer_name}; "
-                f"Запчасть: {name}; "
-                f"Себестоимость производства: {production_cost}"
+            most_expensive_parts.append(
+                {
+                    "manufacturer_name": manufacturer_name,
+                    "name": name,
+                    "production_cost": production_cost,
+                }
             )
+
+    return most_expensive_parts
+
+
+def print_second_task_result(most_expensive_parts):
+    """Print the most expensive part for each manufacturer."""
+    print("\nЗадание Г2:")
+
+    for part in most_expensive_parts:
+        print(
+            f"Производитель: {part["manufacturer_name"]}; "
+            f"Запчасть: {part["name"]}; "
+            f"Себестоимость производства: {part["production_cost"]}"
+        )
 
 
 def third_task(original_many_to_many):
-    """Print manufacturers and their parts sorted by production capacity."""
-    print("\nЗадание Г3:")
-
+    """Return manufacturers and their parts sorted by production capacity."""
     many_to_many = sorted(
         original_many_to_many,
         key=lambda x: x["manufacturer_production_capacity"],
         reverse=True,
     )
+
+    manufacturers = dict()
+
+    for manufacturer_part in many_to_many:
+        if manufacturer_part["manufacturer_id"] not in manufacturers:
+            manufacturers[manufacturer_part["manufacturer_id"]] = {
+                "manufacturer_name": manufacturer_part["manufacturer_name"],
+                "manufacturer_production_capacity": manufacturer_part[
+                    "manufacturer_production_capacity"
+                ],
+                "parts": [],
+            }
+
+        manufacturers[manufacturer_part["manufacturer_id"]]["parts"].append(
+            manufacturer_part["part_name"]
+        )
+
+    return manufacturers
+
+
+def print_third_task_result(manufacturers):
+    print("\nЗадание Г3:")
+
     previous_manufacturer_name = ""
 
-    for part_manufacturer in many_to_many:
-        manufacturer_name = part_manufacturer["manufacturer_name"]
+    for manufacturer in manufacturers.values():
+        manufacturer_name = manufacturer["manufacturer_name"]
+
         if manufacturer_name != previous_manufacturer_name:
-            previous_manufacturer_name = part_manufacturer["manufacturer_name"]
-            manufacturer_production_capacity = part_manufacturer[
+            previous_manufacturer_name = manufacturer["manufacturer_name"]
+            manufacturer_production_capacity = manufacturer[
                 "manufacturer_production_capacity"
             ]
 
@@ -141,12 +180,12 @@ def third_task(original_many_to_many):
                 f"мощность {manufacturer_production_capacity}):"
             )
 
-        print(part_manufacturer["part_name"])
+        for part in manufacturer["parts"]:
+            print(part)
 
 
 def main():
     """Main function."""
-
     one_to_many = [
         {
             "name": part.name,
@@ -159,35 +198,36 @@ def main():
         if part.manufacturer_id == manufacturer.id
     ]
 
-    first_task(one_to_many)
-    second_task(one_to_many)
+    print_first_task_result(first_task(one_to_many))
+    print_second_task_result(second_task(one_to_many))
 
     many_to_many_temp = [
         {
-            "manufacturer_name": manufacturer.name,
-            "manufacturer_production_capacity": manufacturer.production_capacity,
             "manufacturer_id": part_manufacturer.manufacturer_id,
             "part_id": part_manufacturer.part_id,
+            "manufacturer_name": manufacturer.name,
+            "manufacturer_production_capacity": manufacturer.production_capacity,
         }
         for manufacturer in manufacturers
-        for part_manufacturer in parts_manufacturers
+        for part_manufacturer in PartsManufacturers
         if manufacturer.id == part_manufacturer.manufacturer_id
     ]
 
     many_to_many = [
         {
-            "manufacturer_name": part_manufacturer["manufacturer_name"],
-            "manufacturer_production_capacity": part_manufacturer[
+            "manufacturer_id": manufacturer_part["manufacturer_id"],
+            "manufacturer_name": manufacturer_part["manufacturer_name"],
+            "manufacturer_production_capacity": manufacturer_part[
                 "manufacturer_production_capacity"
             ],
             "part_name": part.name,
         }
-        for part_manufacturer in many_to_many_temp
+        for manufacturer_part in many_to_many_temp
         for part in parts
-        if part.id == part_manufacturer["part_id"]
+        if part.id == manufacturer_part["part_id"]
     ]
 
-    third_task(many_to_many)
+    print_third_task_result(third_task(many_to_many))
 
 
 if __name__ == "__main__":

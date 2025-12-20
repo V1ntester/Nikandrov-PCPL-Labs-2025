@@ -1,36 +1,29 @@
 """Module for representing manufacturers."""
 
+from dataclasses import dataclass, field
 
+
+@dataclass(order=True)
 class Manufacturer:
     """Represents a manufacturer.
 
     Attributes:
-        id: Unique identifier for the manufacturer.
-        name: Name of the manufacturer.
-        industry: Industry sector of the manufacturer.
-        specialization: Specialization area of the manufacturer.
-        production_capacity: Production capacity in units per time period.
-        phone: Contact phone number.
-        email: Contact email address.
+        id (int): Unique identifier for the manufacturer.
+        name (str): Name of the manufacturer.
+        industry (str): Industry sector of the manufacturer.
+        specialization (str): Specialization area of the manufacturer.
+        production_capacity (int): Production capacity in units per time period.
+        phone (str): Contact phone number.
+        email (str): Contact email address.
     """
 
-    def __init__(
-        self,
-        manufacturer_id: int,
-        name: str,
-        industry: str,
-        specialization: str,
-        production_capacity: int,
-        phone: str,
-        email: str,
-    ):
-        self.id = manufacturer_id
-        self.name = name
-        self.industry = industry
-        self.specialization = specialization
-        self.production_capacity = production_capacity
-        self.phone = phone
-        self.email = email
+    id: int = field(compare=False)
+    name: str = field(compare=False)
+    industry: str = field(compare=False)
+    specialization: str = field(compare=False)
+    production_capacity: int = field(compare=True)
+    phone: str = field(compare=False)
+    email: str = field(compare=False)
 
     def __eq__(self, other):
         """Checks equality based on manufacturer attributes."""
@@ -44,22 +37,3 @@ class Manufacturer:
             and self.email == other.email
             and self.phone == other.phone
         )
-
-    def __hash__(self):
-        """Returns hash based on manufacturer attributes."""
-        return hash(
-            (
-                self.name,
-                self.industry,
-                self.specialization,
-                self.production_capacity,
-                self.phone,
-                self.email,
-            )
-        )
-
-    def __lt__(self, other):
-        """Compares manufacturers based on production capacity."""
-        if not isinstance(other, type(self)):
-            return NotImplemented
-        return self.production_capacity < other.production_capacity
