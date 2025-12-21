@@ -34,6 +34,7 @@ class Program
         Console.Write('\n');
         PrintCollection(list);
 
+        Console.WriteLine("\nSparseMatrix:");
         SparseMatrix3D<Shape> sparseMatrix3D = new(3, 3, 3);
         sparseMatrix3D[1, 1, 1] = new Circle(1);
 
@@ -42,6 +43,7 @@ class Program
         SimpleStack<Shape> stack = new();
         stack.Push(new Circle(1));
 
+        Console.WriteLine("\nStack:");
         Console.WriteLine(stack.Pop().ToString());
     }
 
