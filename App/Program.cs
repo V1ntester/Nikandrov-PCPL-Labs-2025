@@ -39,7 +39,7 @@ class Program
 
         Console.WriteLine(sparseMatrix3D.ToString());
 
-        Stack<Shape> stack = new();
+        SimpleStack<Shape> stack = new();
         stack.Push(new Circle(1));
 
         Console.WriteLine(stack.Pop().ToString());
