@@ -8,5 +8,5 @@ public class SimpleNode<T>
     }
 
     public T Value { get; set; }
-    public SimpleNode<T>? Next { get; set; } 
-} 
+    public SimpleNode<T>? Next { get; set; }
+}

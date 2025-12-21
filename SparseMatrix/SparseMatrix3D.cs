@@ -9,7 +9,8 @@ public class SparseMatrix3D<T>
 
     public SparseMatrix3D(int rowsCount, int columnsCount, int layersCount)
     {
-        if (rowsCount < 0 || columnsCount < 0 || layersCount < 0) {
+        if (rowsCount < 0 || columnsCount < 0 || layersCount < 0)
+        {
             throw new ArgumentOutOfRangeException("Argument out of range");
         }
 
@@ -50,7 +51,7 @@ public class SparseMatrix3D<T>
             }
             else
             {
-                _values[(row, column, layer)] = value;                
+                _values[(row, column, layer)] = value;
             }
         }
     }
@@ -60,7 +61,7 @@ public class SparseMatrix3D<T>
         string result = "\n";
 
         foreach (var element in _values)
-        {   
+        {
             result += $"Coords: {element.Key.Item1} {element.Key.Item2} {element.Key.Item3}; Value: {element.Value?.ToString() ?? "Null"}\n";
         }
 
@@ -69,8 +70,8 @@ public class SparseMatrix3D<T>
 
     private bool ValidateCoords(int row, int column, int layer)
     {
-        return row >= 0 && row < _rowsCount && 
-            column >= 0 && column < _columnsCount && 
+        return row >= 0 && row < _rowsCount &&
+            column >= 0 && column < _columnsCount &&
             layer >= 0 && layer < _layersCount;
     }
 }

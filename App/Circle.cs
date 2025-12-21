@@ -13,11 +13,5 @@ public class Circle : Shape, IPrint
 
     public override double CalculateArea() => Math.PI * Radius * Radius;
 
-    // public override bool Equals(object? obj)
-    // {
-    //     if (obj is null || obj is not Circle) return false;
-    //     return CalculateArea() == ((Circle)obj).CalculateArea();
-    // }
-
     public override string ToString() => $"Radius: {Radius:F4}; Area: {CalculateArea():F4}";
 }
