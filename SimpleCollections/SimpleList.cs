@@ -28,36 +28,81 @@ public class SimpleList<T> : IEnumerable<T>
 
     public bool Remove(T value)
     {
-        bool isRemoved = false;
+        if (Length == 0) throw new InvalidOperationException("List is empty");
 
         SimpleNode<T>? current = _head;
         SimpleNode<T>? previous = null;
 
-        while (current is not null && current.Value is not null)
+        while (current is not null)
         {
-            if (current.Value.Equals(value))
+            if (current.Value is not null && current.Value.Equals(value))
             {
-                if (previous is not null)
+                if (previous is null)
                 {
-                    previous.Next = current.Next;
+                    _head = current.Next;
+
+                    if (_head is null)
+                    {
+                        _tail = null;
+                    }
                 }
                 else
                 {
-                    _head = current.Next;
+                    previous.Next = current.Next;
+
+                    if (current.Next is null)
+                    {
+                        _tail = previous;
+                    }
                 }
 
                 --Length;
-
-                isRemoved = true;
+                return true;
             }
 
             previous = current;
             current = current.Next;
         }
 
-        return isRemoved;
+        return false;
     }
-    
+
+    public void RemoveAt(int index)
+    {
+        if (Length == 0) throw new InvalidOperationException("List is empty");
+        else if (index < 0 || index >= Length) throw new IndexOutOfRangeException();
+
+        SimpleNode<T>? current = _head;
+        SimpleNode<T>? previous = null;
+
+        for (int i = 0; i < index; i++)
+        {
+            previous = current;
+            current = current!.Next;
+        }
+
+        if (previous is null)
+        {
+            _head = current!.Next;
+
+            if (_head is null)
+            {
+                _tail = null;
+            }
+        }
+        else
+        {
+            previous.Next = current!.Next;
+
+            if (current.Next is null)
+            {
+                _tail = previous;
+            }
+        }
+
+        --Length;
+    }
+
     public T this[int index]
     {
         get
@@ -73,7 +118,7 @@ public class SimpleList<T> : IEnumerable<T>
 
             return current!.Value;
         }
-        
+
         set
         {
             if (index < 0 || index >= Length) throw new IndexOutOfRangeException();
@@ -97,7 +142,7 @@ public class SimpleList<T> : IEnumerable<T>
         {
             if (current.Value.Equals(value)) return true;
             current = current.Next;
-        } 
+        }
 
         return false;
     }
